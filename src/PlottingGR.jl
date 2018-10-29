@@ -4,6 +4,13 @@ __precompile__(true)
 
 module PlottingGR
 
-# package code goes here
+using Colors
+using IntervalSets
+using PlottingRecipes
+using StatsBase
+
+import GR
+
+include("util.jl")
 
 end # module
