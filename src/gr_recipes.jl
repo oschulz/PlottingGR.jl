@@ -5,13 +5,10 @@ PlottingRecipes.plotting_recipe!(
     figure::GRFigure, options::PlotOptions,
     ::Val{:gr_polyline}, x::RealVector, y::RealVector
 )
-    x_gr = convert(GRVector, x)
-    y_gr = convert(GRVector, y)
-    GR.polyline(x_gr, y_gr)
-
-    _gr_setlinecolor(:green)(options[:linecolor])
-
-    push!(scene.actions, action)
+    _gr_setfillcolor(options[:fillcolor])
+    _gr_setfillstyle(options[:fillstyle])
+    _gr_setlinecolor(options[:linecolor])
+    GR.polyline(convert(GRVector, x), convert(GRVector, y))
 end
 
 

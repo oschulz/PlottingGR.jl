@@ -12,9 +12,12 @@ using StatsBase
 
 import GR
 
-include("util.jl")
 include("colors.jl")
-include("plotprimitive.jl")
+include("options.jl")
+include("data.jl")
 include("grfigure.jl")
+include("plot.jl")
+include("gr_recipes.jl")
+include("std_recipes.jl")
 
 end # module

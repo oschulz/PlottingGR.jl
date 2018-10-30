@@ -10,10 +10,6 @@ abstract type AbstractPlotBackground end
 abstract type AbstractFigure{NDIMS} end
 
 
-const PlotArgs = Vector{Any}
-const PlotOpts = Dict{Symbol, Any}
-
-
 
 struct Axis
     range::FloatInterval
@@ -73,7 +69,7 @@ const PlotActionFunc = FunctionWrappers.FunctionWrapper{Nothing,Tuple{PlotArgs,P
 
 struct PlotAction
     args::Vector{Any}
-    opts::GRPlotOpts
+    opts::GRPlotOptijons
     func::PlotActionFunc
 end
 
