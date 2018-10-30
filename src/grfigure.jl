@@ -14,14 +14,43 @@ const PlotArgs = Vector{Any}
 const PlotOpts = Dict{Symbol, Any}
 
 
+
 struct Axis
     range::FloatInterval
-    scale::Function
+    scale::Symbol
     label::String
-    label_color::AnyGRColor
+    axis_color::GRColor
+    label_color::GRColor
 end
 
 Axis() = Axis(-Inf..Inf, identity, "", RGBAColor(0, 0, 0, 1))
+
+
+function _gr_drawaxes(axes::StaticVector{2,Axis})
+    x_min = minimum(x_interval)
+    x_max = maximum(x_interval)
+    y_min = minimum(y_interval)
+    y_max = maximum(y_interval)
+
+    GR.setwindow(x_min, x_max, y_min, y_max)
+
+    if !_gr_iscolorless(background_color)
+        _gr_setfillcolor(background_color)
+        _gr_setfillstyle(true)
+        GR.fillrect(x_min, x_max, y_min, y_max)
+    end
+
+    x_origin = x_min
+    y_origin = y_min
+
+    _gr_setlinecolor(grid_color)
+    GR.grid(x_tick, y_tick, x_origin, y_origin, major_xtick, major_ytick)
+
+    GR.setcharheight(0.020)
+    _gr_settextcolor(axes_color)
+    _gr_setlinecolor(axes_color)
+    GR.axes(x_tick, y_tick, x_origin, y_origin, major_xtick, major_ytick, tick_size)
+end
 
 
 @with_kw struct Legend
