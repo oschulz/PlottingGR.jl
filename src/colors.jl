@@ -1,13 +1,6 @@
 # This file is a part of PlottingGR.jl, licensed under the MIT License (MIT).
 
 
-const AnyColor = Any
-
-const RGBAColor = RGBA{Float64}
-
-
-
-
 PlottingRecipes.parse_color(color::Colorant) = color
 PlottingRecipes.parse_color(color::Integer) = color
 PlottingRecipes.parse_color(color::Nothing) = RGBA{Float64}(1, 1, 1, 0)
@@ -16,6 +9,8 @@ PlottingRecipes.parse_color(color::NTuple{4, Real}) = RGBA(color...)
 PlottingRecipes.parse_color(color::Symbol) = parse(Colorant, color)
 
 
+
+const AnyColor = Any
 
 struct GRColor
     colorindex::Int
@@ -44,24 +39,28 @@ GRColor(color::Symbol) = GRColor(parse_color(color), 1.0)
 _gr_isinvisible(color::GRColor) = color.alpha ≈ 0
 
 
-function _gr_setlinecolor(color::GRColor)
-    GR.settransparency(color.alpha)
-    GR.setlinecolorind(color.colorindex)
+function _gr_setlinecolor(color::AnyColor)
+    c = convert(GRColor, color)
+    GR.settransparency(c.alpha)
+    GR.setlinecolorind(c.colorindex)
 end
 
-function _gr_setfillcolor(color::GRColor)
-    GR.settransparency(color.alpha)
-    GR.setfillcolorind(color.colorindex)
+function _gr_setfillcolor(color::AnyColor)
+    c = convert(GRColor, color)
+    GR.settransparency(c.alpha)
+    GR.setfillcolorind(c.colorindex)
 end
 
-function _gr_setmarkercolor(color::GRColor)
-    GR.settransparency(color.alpha)
-    GR.setmarkercolorind(color.colorindex)
+function _gr_setmarkercolor(color::AnyColor)
+    c = convert(GRColor, color)
+    GR.settransparency(c.alpha)
+    GR.setmarkercolorind(c.colorindex)
 end
 
-function _gr_settextcolor(color::GRColor)
-    GR.settransparency(color.alpha)
-    GR.settextcolorind(color.colorindex)
+function _gr_settextcolor(color::AnyColor)
+    c = convert(GRColor, color)
+    GR.settransparency(c.alpha)
+    GR.settextcolorind(c.colorindex)
 end
 
 
@@ -93,10 +92,10 @@ GRFillStyle(fillstyle::Nothing) = GRFillStyle(GR.INTSTYLE_HOLLOW, -1)
 GRFillStyle(fillstyle::Symbol) = GRFillStyle(_gr_fillstyles[fillstyle], -1)
 
 
-function _gr_setfillstyle(fillstyle::GRFillStyle)
-    fillstyle_index = _gr_fillstyle_index(fillstyle)
-    GR.setfillintstyle(fillstyle.mode)
-    if fillstyle.pattern >= 0
-        GR.setfillstyle(convert(Int, fillstyle.pattern))
+function _gr_setfillstyle(fillstyle::AnyFillStyle)
+    style = convert(GRFillStyle, fillstyle)
+    GR.setfillintstyle(style.mode)
+    if style.pattern >= 0
+        GR.setfillstyle(convert(Int, style.pattern))
     end
 end

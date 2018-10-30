@@ -4,4 +4,4 @@
 const RealVector = AbstractVector{<:Real}
 const GRVector =  AbstractVector{Float64}
 
-gr_data_copy(A::RealVector) = deepcopy(convert(GRVector), A)
+# gr_data_copy(A::RealVector) = deepcopy(convert(GRVector), A)

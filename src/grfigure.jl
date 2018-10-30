@@ -77,26 +77,35 @@ struct PlotAction
     func::PlotActionFunc
 end
 
+(action::PlotAction)() = action.func(action.args, action.opts)
+
 
 mutable struct GRFigure{N}
     title::String
     axes::StaticVector{N,Axis}
     # TODO: legend
     actions::Vector{PlotAction}
-    sub_figures::Vector{GRFigure}
+    # TODO: subfigure_placement
+    subfigures::Vector{GRFigure}
 end
 
 
-mutable struct Plot{T<:AbstractBackend} <: AbstractPlot{T}
-    backend::T                   # the backend type
-    n::Int                       # number of series
-    attr::KW                     # arguments for the whole plot
-    user_attr::KW                # raw arg inputs (after aliases).  these are used as the input dict in `_plot!`
-    series_list::Vector{Series}  # arguments for each series
-    o                            # the backend's plot object
-    subplots::Vector{Subplot}
-    spmap::SubplotMap            # provide any label as a map to a subplot
-    layout::AbstractLayout
-    inset_subplots::Vector{Subplot}  # list of inset subplots
-    init::Bool
+function PlottingRecipes.plot!(figure::GRFigure, args...; kwargs...)
+    options = PlotOptions(kwargs)
+    actionfunc = PlotActionFunc() do args, opts
+        plot_recipe!(figure, options, args...)
+    end
+    action = PlotAction(args, opts, actionfunc)
+    push!(scene.actions, action)
 end
+
+
+function _draw(figure::GRFigure)
+    for action in figure.actions
+        action()
+    end
+    for subfig in figure.subfigures
+        _draw(subfig)
+    end
+end
+
