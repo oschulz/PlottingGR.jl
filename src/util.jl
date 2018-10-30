@@ -40,7 +40,3 @@ function _gr_setup_plot_2d(;
     _gr_setlinecolor(axes_color)
     GR.axes(x_tick, y_tick, x_origin, y_origin, major_xtick, major_ytick, tick_size)
 end
-
-
-
-const ActionWrapper = FunctionWrappers.FunctionWrapper{Nothing,Tuple{}}
