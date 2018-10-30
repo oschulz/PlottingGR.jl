@@ -14,5 +14,7 @@ import GR
 
 include("util.jl")
 include("colors.jl")
+include("plotprimitive.jl")
+include("grfigure.jl")
 
 end # module

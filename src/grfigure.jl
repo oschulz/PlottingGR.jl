@@ -1,7 +1,17 @@
 # This file is a part of PlottingGR.jl, licensed under the MIT License (MIT).
 
 
-@with_kw struct GRAxis <: AbstractPlotAxis
+abstract trype GRFigure <: AbstractFigure end
+
+
+abstract type AbstractPlotBackground end
+
+
+abstract type AbstractFigure{NDIMS} end
+
+
+
+@with_kw struct GRAxis
     range::FloatInterval = -Inf..Inf
     scale::Function = identity
     label::String
@@ -9,21 +19,7 @@
 end
 
 
-abstract trype GRFigure <: AbstractFigure end
-
-
-struct GRAxes2D
-    x::GRAxis
-    y::GRAxis
-end
-
-
-struct GRAxes3D
-    x::GRAxis
-    y::GRAxis
-    z::GRAxis
-end
-
+abstract type GRPlotPrimitive end
 
 struct GRPlotBackground
     background_color::RGBAColor
@@ -31,13 +27,9 @@ struct GRPlotBackground
 end
 
 
-struct GREmptyFigure <: GRFigure
-    axes::GRAxes2D
+struct GRFigure{NDIMS}
+    axes::StaticArray{NDIMS,GRAxis}
     plot_background::GRPlotBackground
-end
-
-
-struct GRFigure2D <: GRFigure
-    axes::GRAxes2D
-    plot_background::GRPlotBackground
+    contents::Vector{GRPlottingPrimitive}
+    sub_figures::Vector{GRFigure}
 end
