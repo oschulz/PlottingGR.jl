@@ -2,16 +2,6 @@
 
 
 const FloatInterval = Interval{:closed,:closed,Float64}
-const RGBAColor = RGBA{Float64}
-
-
-function _setcolor_gr(c::Colorant)
-    GR.settransparency(clamp(float(alpha(c)), 0, 1))
-    color_index = convert(Int, GR.inqcolorfromrgb(red(c), green(c), blue(c)))
-    GR.setlinecolorind(color_index)
-end
-
-_setcolor_gr(c::Symbol) = _setcolor_gr(parse(Colorant, c))
 
 
 function _setup_plot_2d(;
@@ -21,8 +11,8 @@ function _setup_plot_2d(;
     y_tick::Float64 = (maximum(y_interval) - minimum(y_interval)) / 10,
     major_xtick::Int = 2,
     major_ytick::Int = 2,
-    grid_color::RGBAColor = convert(RGBAColor, colorant"blue"),
-    axes_color::RGBAColor = convert(RGBAColor, colorant"blue"),
+    grid_color::AnyColor = convert(RGBAColor, colorant"gray"),
+    axes_color::RGBAColor = convert(RGBAColor, colorant"black"),
     tick_size::Float64 = -0.005,
 )
     x_min = minimum(x_interval)
@@ -32,16 +22,16 @@ function _setup_plot_2d(;
 
     GR.setwindow(x_min, x_max, y_min, y_max)
 
-    GR.setfillcolorind(90)
+    _gr_setfillcolor(90)
     GR.setfillintstyle(1)
     GR.fillrect(x_min, x_max, y_min, y_max)
 
     x_origin = x_min
     y_origin = y_min
 
-    _setcolor_gr(grid_color)
+    _gr_setlinecolor(grid_color)
     GR.grid(x_tick, y_tick, x_origin, y_origin, major_xtick, major_ytick)
 
-    _setcolor_gr(axes_color)
+    _gr_setlinecolor(axes_color)
     GR.axes(x_tick, y_tick, x_origin, y_origin, major_xtick, major_ytick, tick_size)
 end

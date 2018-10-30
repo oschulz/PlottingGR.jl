@@ -7,10 +7,12 @@ module PlottingGR
 using Colors
 using IntervalSets
 using PlottingRecipes
+using StaticArrays
 using StatsBase
 
 import GR
 
 include("util.jl")
+include("colors.jl")
 
 end # module

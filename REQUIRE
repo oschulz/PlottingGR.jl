@@ -3,4 +3,5 @@ Colors
 GR
 IntervalSets
 PlottingRecipes
+StaticArrays
 StatsBase
